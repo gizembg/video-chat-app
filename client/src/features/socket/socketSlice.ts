@@ -1,8 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
-import { io } from 'socket.io-client';
-import Peer from 'simple-peer';
-import { AnyTxtRecord } from 'dns';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 
 type SocketSliceType = {
     callAccepted: boolean | null;
@@ -10,6 +7,7 @@ type SocketSliceType = {
     name: string;
     call: { isReceivingCall: boolean, from:string, name: string, signal:any };
     me: string;
+    isMeMuted: boolean;
 }
 
 const initialState: SocketSliceType = {
@@ -18,9 +16,8 @@ const initialState: SocketSliceType = {
     name: '',
     call: {isReceivingCall:false,from:'', name:'', signal:null},
     me: '',
+    isMeMuted: true,
 };
-
-
 
 export const socketSlice = createSlice({
     name: 'counter',
@@ -41,18 +38,20 @@ export const socketSlice = createSlice({
         setName: (state: SocketSliceType, action: PayloadAction<any>) => {
             state.name = action.payload;
         },
+        setIsMeMuted: (state: SocketSliceType, action: PayloadAction<any>) => {
+            state.isMeMuted = action.payload;
+        },
     },
 });
 
-export const { setCallAccepted, setCallEnded, setMe, setCall,setName } = socketSlice.actions;
+export const { setCallAccepted, setCallEnded, setMe, setCall,setName,setIsMeMuted } = socketSlice.actions;
 
 export const selectCallAccepted = (state: RootState) => state.socket.callAccepted;
 export const selectCallEnded = (state: RootState) => state.socket.callEnded;
 export const selectName = (state: RootState) => state.socket.name;
 export const selectCall = (state: RootState) => state.socket.call;
 export const selectMe = (state: RootState) => state.socket.me;
-
-
+export const selectIsMeMuted = (state: RootState) => state.socket.isMeMuted;
 
 
 export default socketSlice.reducer;

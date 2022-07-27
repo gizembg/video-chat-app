@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { selectCallAccepted, selectCallEnded, selectMe, selectName, setName } from '../features/socket/socketSlice'
+import { selectCallAccepted,setIsMeMuted, selectCallEnded,selectIsMeMuted, selectMe, selectName, setName } from '../features/socket/socketSlice'
 
 type FooterProps = {
-  callUser: (id:string)=>void;
-  leaveCall:()=>void
+  callUser: (id: string) => void;
+  leaveCall: () => void
 }
-const Footer : React.FC<FooterProps>= ({ callUser, leaveCall }) => {
+const Footer: React.FC<FooterProps> = ({ callUser, leaveCall }) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector(selectMe);
+  const isMeMuted = useAppSelector(selectIsMeMuted);
   const callAccepted = useAppSelector(selectCallAccepted);
   const callEnded = useAppSelector(selectCallEnded);
   const name = useAppSelector(selectName);
   const [idToCall, setIdToCall] = useState<string>('');
 
-  const handleNameChange = (e:  React.MouseEvent<HTMLElement>) => {
+  const handleNameChange = (e: React.MouseEvent<HTMLElement>) => {
     const val = (e.target as HTMLInputElement).value
     dispatch(setName(val));
-  
+
   }
 
   const handleCopyId = () => {
@@ -26,13 +27,37 @@ const Footer : React.FC<FooterProps>= ({ callUser, leaveCall }) => {
 
   const handleCallUser = () => {
     callUser(idToCall)
+  }  
+  
+  const handleMute = () => {
+
+    dispatch(setIsMeMuted(!isMeMuted))
   }
 
+  const mutedIcon = (<svg width="17px" height="17px" viewBox="0 0 512.011 512.011">
+    <path d="M426.672,213.341c-11.797,0-21.333,9.557-21.333,21.333v21.333c0,82.347-67.008,149.333-149.333,149.333     s-149.333-66.987-149.333-149.333v-21.333c0-11.776-9.536-21.333-21.333-21.333c-11.797,0-21.333,9.557-21.333,21.333v21.333     c0,98.645,74.816,180.096,170.667,190.741v22.592h-42.667c-11.797,0-21.333,9.557-21.333,21.333s9.536,21.333,21.333,21.333h128     c11.797,0,21.333-9.557,21.333-21.333s-9.536-21.333-21.333-21.333h-42.667v-22.592     c95.851-10.645,170.667-92.096,170.667-190.741v-21.333C448.005,222.899,438.469,213.341,426.672,213.341z" />
+    <path d="M70.256,411.592l-64,64c-8.341,8.341-8.341,21.824,0,30.165c4.16,4.16,9.621,6.251,15.083,6.251     c5.461,0,10.923-2.091,15.083-6.251l64-64c8.341-8.341,8.341-21.824,0-30.165C92.08,403.251,78.597,403.251,70.256,411.592z" />
+    <path d="M256.005,384.008c70.592,0,128-57.408,128-128v-128c0-70.592-57.408-128-128-128s-128,57.408-128,128v128     C128.005,326.6,185.413,384.008,256.005,384.008z M219.589,262.259l64-64c8.341-8.341,21.824-8.341,30.165,0     s8.341,21.824,0,30.165l-64,64c-4.16,4.16-9.621,6.251-15.083,6.251c-5.461,0-10.923-2.091-15.083-6.251     C211.248,284.083,211.248,270.6,219.589,262.259z" />
+    <path d="M505.755,6.259c-8.341-8.341-21.824-8.341-30.165,0l-64,64c-8.341,8.341-8.341,21.824,0,30.165     c4.16,4.16,9.621,6.251,15.083,6.251s10.923-2.091,15.083-6.251l64-64C514.096,28.083,514.096,14.6,505.755,6.259z" />
+  </svg>)
 
+
+  const unmutedIcon = (<svg width="17px" height="17px" viewBox="0 0 52 52" >
+    <g>
+      <path d="M41.5,18c-1.4,0-2.5,1-2.5,2.4v4c0,7-5.9,12.8-13.1,12.8s-13.1-5.8-13.1-12.8v-4c0-1.4-1.1-2.4-2.5-2.4   S8,19,8,20.4v4c0,8.9,6.8,16.2,15.5,17.4v3.4h-4.1c-1.4,0-2.5,1-2.5,2.4c0,1.4,1.1,2.4,2.5,2.4h13.1c1.4,0,2.5-1,2.5-2.4   c0-1.4-1.1-2.4-2.5-2.4h-4.1v-3.4C37.2,40.6,44,33.3,44,24.4v-4C44,19,42.9,18,41.5,18z" />
+      <path d="M26,32.4c4.4,0,8-3.6,8-8V9.9C34,5.5,30.5,2,26.1,2h-0.2C21.5,2,18,5.5,18,9.9v14.5   C18,28.8,21.6,32.4,26,32.4z" />
+    </g>
+  </svg>)
   return (
     <>
       <div className='user-label-container'>
-        <input placeholder="Name" type='text' value={name} onChange={(e:any) => handleNameChange(e)} />
+        <input placeholder="Name" type='text' value={name} onChange={(e: any) => handleNameChange(e)} />
+
+        <div className='user-label-item label-button'>
+          <button className='icon-button' onClick={handleMute}>
+            {isMeMuted? mutedIcon: unmutedIcon}
+          </button>
+        </div>
       </div>
 
       <div className='user-label-container'>
