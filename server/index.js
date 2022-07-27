@@ -16,7 +16,7 @@ const io = new Server(server,
 
 app.use(cors());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.get('/', (req, res) => {  //root rout
     res.send('Running');

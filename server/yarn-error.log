@@ -1,0 +1,43 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn install
+
+PATH: 
+  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  14.17.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.npm
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:69:26)
+
+npm manifest: 
+  {
+    "name": "video-chat",
+    "type": "module",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Gizem Boğa <gizem.boga@ekinokssoftware.com>",
+    "license": "MIT",
+    "scripts": {
+      "start":"node index.js"
+    },
+    "dependencies": {
+      "cors": "^2.8.5",
+      "express": "^4.18.1",
+      "nodemon": "^2.0.19",
+      "socket.io": "^4.5.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
