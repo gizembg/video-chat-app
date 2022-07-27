@@ -10,12 +10,16 @@ import Notification from '../components/Notification';
 // const socket = io('http://localhost:5001');
 const socket = io('https://chat-app-video.herokuapp.com/');
 
+type VideoStream = {
+  srcObject: MediaStream;
+}
+
 const SocketContainer: React.FC = React.memo(() => {
   const dispatch = useAppDispatch();
   const [stream, setStream] = useState<MediaStream>();
-  const myVideo = useRef<any>();
-  const userVideo = useRef<any>();
-  const connectionRef = useRef<any>();
+  const myVideo = useRef<VideoStream>();
+  const userVideo = useRef<VideoStream>();
+  const connectionRef = useRef<Peer.Instance>();
   const call = useAppSelector(selectCall);
   const me = useAppSelector(selectMe);
   const name = useAppSelector(selectName);
@@ -45,7 +49,9 @@ const SocketContainer: React.FC = React.memo(() => {
     });
 
     peer.on('stream', (currentStream) => {
+      if(userVideo.current){
       userVideo.current.srcObject = currentStream;
+      }
     });
 
     peer.signal(call.signal);
@@ -61,7 +67,9 @@ const SocketContainer: React.FC = React.memo(() => {
     });
 
     peer.on('stream', (currentStream) => {
-      userVideo.current.srcObject = currentStream;
+      if(userVideo.current){
+        userVideo.current.srcObject = currentStream;
+      }
     });
 
     socket.on('callAccepted', (signal) => {
@@ -76,7 +84,9 @@ const SocketContainer: React.FC = React.memo(() => {
   const leaveCall = React.useCallback( () => {
     dispatch(setCallEnded(true));
 
-    connectionRef.current.destroy();
+    if(connectionRef.current){
+      connectionRef.current.destroy();
+    }
 
     window.location.reload();
   },[dispatch]);

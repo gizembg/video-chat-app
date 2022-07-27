@@ -3,8 +3,8 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { selectCallAccepted, selectCallEnded, selectMe, selectName, setName } from '../features/socket/socketSlice'
 
 type FooterProps = {
-  callUser: any;
-  leaveCall:any
+  callUser: (id:string)=>void;
+  leaveCall:()=>void
 }
 const Footer : React.FC<FooterProps>= ({ callUser, leaveCall }) => {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ const Footer : React.FC<FooterProps>= ({ callUser, leaveCall }) => {
   const callAccepted = useAppSelector(selectCallAccepted);
   const callEnded = useAppSelector(selectCallEnded);
   const name = useAppSelector(selectName);
-  const [idToCall, setIdToCall] = useState('');
+  const [idToCall, setIdToCall] = useState<string>('');
 
   const handleNameChange = (e:  React.MouseEvent<HTMLElement>) => {
     const val = (e.target as HTMLInputElement).value

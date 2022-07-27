@@ -27,9 +27,6 @@ const Notification : React.FC <NotificationProps>= ({ answerCall }) => {
                 </svg>
                 </button>
               </div>
-
-    
-
         </div>
       )}
     </>

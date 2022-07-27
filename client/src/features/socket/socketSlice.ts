@@ -8,7 +8,7 @@ type SocketSliceType = {
     callAccepted: boolean | null;
     callEnded: boolean| null;
     name: string;
-    call: any;
+    call: { isReceivingCall: boolean, from:string, name: string, signal:any };
     me: string;
 }
 
@@ -16,13 +16,13 @@ const initialState: SocketSliceType = {
     callAccepted: false,
     callEnded: false,
     name: '',
-    call: {},
+    call: {isReceivingCall:false,from:'', name:'', signal:null},
     me: '',
 };
 
 
 
-export const counterSlice = createSlice({
+export const socketSlice = createSlice({
     name: 'counter',
     initialState,
     reducers: {
@@ -44,7 +44,7 @@ export const counterSlice = createSlice({
     },
 });
 
-export const { setCallAccepted, setCallEnded, setMe, setCall,setName } = counterSlice.actions;
+export const { setCallAccepted, setCallEnded, setMe, setCall,setName } = socketSlice.actions;
 
 export const selectCallAccepted = (state: RootState) => state.socket.callAccepted;
 export const selectCallEnded = (state: RootState) => state.socket.callEnded;
@@ -55,4 +55,4 @@ export const selectMe = (state: RootState) => state.socket.me;
 
 
 
-export default counterSlice.reducer;
+export default socketSlice.reducer;
